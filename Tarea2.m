@@ -120,10 +120,15 @@ senal_n = normrnd(mu,sigma,size(st));
 
 Ps = sum(abs(st).^2);
 Pn = sum(abs(senal_n).^2);
-
 SNR = 10*log(Ps/Pn);
 
 %---------P10-------------
-% Demodulador
+% Diodo
+V1 = st;
+for t = 1:length(V1)
+    if V1(t) < 0
+        V1(t) = 0;
+    end
+end
 
 
