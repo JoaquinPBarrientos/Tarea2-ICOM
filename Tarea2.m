@@ -2,46 +2,60 @@
 % Abrir archivo profesor
 m = open('music02.mat');
 m_derecho = (m.y(:,1));
-f_m = (m.Fs)/8;
-m_t = m_derecho(1:1000,1);
-
+fm = (m.Fs)/8;
+mt = m_derecho(1:100000,1);
 
 %---------P2--------------
-N =length(m_t);
-xdft = fft(m_t);
-xdft =xdft(1:N/2 + 1);
-psdx = (1/(f_m*N)* abs(xdft).^2);
-freq = 0:f_m/N:f_m/2;
+N =length(mt);
+mf = fft(mt);
+mf = mf(1:N/2 + 1);
+psd_mf = (1/(fm*N)* abs(mf).^2);
+freq = 0:fm/N:fm/2;
 
 figure; 
-plot(freq,10*log10(psdx))
+plot(freq,10*log10(psd_mf))
 grid on
-title('Periodograma ')
+title('Periodograma')
 xlabel('Frecuencia (Hz)')
 ylabel('Potencia/Frecuencia (dB/Hz)')
 
 %---------P3--------------
-tx = [0:1/f_m:(length(m_t)-1)/f_m];
-[mi,tmi] = resample(m_t,tx,100*f_m);
-
+fs = 100*fm;
+tx = [0:1/fm:(length(mt)-1)/fm];
+[mi,tmi] = resample(mt,tx,fs);
 
 %---------P4--------------
-N =length(m_t);
-xdft1 = fft(mi);
-xdft1 =xdft1(1:N/2 + 1);
-psdx1 = (1/(f_m*N)* abs(xdft1).^2);
-freq = 0:f_m/N:f_m/2;
+Ni =length(mt);
+mif = fft(mi);
+mif = mif(1:Ni/2 + 1);
+psd_mif = (1/(fm*Ni)* abs(mif).^2);
+freq = 0:fm/Ni:fm/2;
 
-figure;
-plot(freq,10*log10(psdx1))
+figure; 
+plot(freq,10*log10(psd_mif))
 grid on
-title('Periodograma ')
+title('Periodograma')
 xlabel('Frecuencia (Hz)')
 ylabel('Potencia/Frecuencia (dB/Hz)')
 
 %---------P5--------------
-%Tenemos mi y tmi
-A_c = 1;
-f_c = 20*f_m
-s_n = A_c*(1+1.5*m_t)*cos(2*pi*m_t*t)
+% Modulación AM DSB-TC
+A = 1;
+fc =20*fm;
+k = 1; 
+tmi = transpose(tmi);
+c = cos(2*pi*fc*tmi);
+st = A*(1+k.*mi).*c;
+t = 1:length(st);
+figure;
+plot(t,st)
+%---------P6--------------
+st = st(1:1000);
+t = 1:length(st);
+figure;
+plot(t,st)
+
+
+
+
 
