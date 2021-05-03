@@ -92,10 +92,10 @@ csc = transpose(csc);
 stsc = mi.*csc * A;
 
 %-----------------------
-stsc = stsc(1:1000);
-t = 1:length(stsc);
+stsc1 = stsc(1:1000);
+t = 1:length(stsc1);
 figure;
-plot(t,stsc)
+plot(t,stsc1)
 title('Onda modulada AM DSB-SC primeras 1000 muestras')
 ylabel('s(t)')
 xlabel('tiempo (t)')
