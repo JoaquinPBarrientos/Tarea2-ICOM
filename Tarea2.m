@@ -4,7 +4,9 @@ m = open('music02.mat');
 m_derecho = (m.y(:,1));
 fm = (m.Fs)/8;
 mt = m_derecho(1:100000,1);
-
+figure;
+t = 1:length(mt);
+plot(t,mt);
 %---------P2--------------
 N = length(mt);
 mf = fft(mt);
@@ -47,21 +49,22 @@ tmi = transpose(tmi);
 c = cos(2*pi*fc*tmi);
 st = A*(1+k.*mi).*c;
 t = 1:length(st);
+
 figure;
 plot(t,st)
 title('Onda modulada AM DSB-TC')
 ylabel('s(t)')
 xlabel('tiempo (t)')
 %---------P6--------------
-st = st(1:1000);
-t = 1:length(st);
+st1 = st(1:1000);
+t = 1:length(st1);
 figure;
-plot(t,st)
+plot(t,st1)
 title('Onda modulada AM DSB-TC primeras 1000 muestras')
 ylabel('s(t)')
 xlabel('tiempo (t)')
 %---------P7--------------
-Ns =length(st);
+Ns = length(st);
 stf = fft(st);
 stf = stf(1:Ns/2 + 1);
 psd_stf = (1/(fm*Ns)* abs(stf).^2);
@@ -82,31 +85,45 @@ A = 1;
 fc = 20*fm;
 k = 1; 
 tmi = transpose(tmi);
-c = cos(2*pi*fc*tmi);
-c = c(1:1000);
-c = transpose(c);
-mi = mi(1:1000);
-st =mi.*c;
-
+csc = cos(2*pi*fc*tmi);
+% csc = csc(1:1000);
+csc = transpose(csc);
+% mi = mi(1:1000);
+stsc = mi.*csc * A;
 
 %-----------------------
-st = st(1:1000);
-t = 1:length(st);
+stsc = stsc(1:1000);
+t = 1:length(stsc);
 figure;
-plot(t,st)
+plot(t,stsc)
 title('Onda modulada AM DSB-SC primeras 1000 muestras')
 ylabel('s(t)')
 xlabel('tiempo (t)')
 %-----------------------
-Ns =length(st);
-stf = fft(st);
-stf = stf(1:Ns/2 + 1);
-psd_stf = (1/(fm*Ns)* abs(stf).^2);
+Ns = length(stsc);
+stscf = fft(stsc);
+stscf = stf(1:Ns/2 + 1);
+psd_stscf = (1/(fm*Ns)* abs(stscf).^2);
 freq = 0:m.Fs/Ns:m.Fs/2;
 
 figure; 
-plot(freq,10*log10(psd_stf))
+plot(freq,10*log10(psd_stscf))
 grid on
 title('PSD de S(f) con AM DSB-SC ')
 xlabel('Frecuencia (Hz)')
 ylabel('Potencia/Frecuencia (dB/Hz)')
+
+%---------P9--------------
+mu = 0;
+sigma = 11;
+senal_n = normrnd(mu,sigma,size(st));
+
+Ps = sum(abs(st).^2);
+Pn = sum(abs(senal_n).^2);
+
+SNR = 10*log(Ps/Pn);
+
+%---------P10-------------
+% Demodulador
+
+
