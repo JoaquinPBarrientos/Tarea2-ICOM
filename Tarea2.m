@@ -114,13 +114,6 @@ xlabel('Frecuencia (Hz)')
 ylabel('Potencia/Frecuencia (dB/Hz)')
 
 %---------P9--------------
-mu = 0;
-sigma = 11;
-senal_n = normrnd(mu,sigma,size(st));
-
-Ps = sum(abs(st).^2);
-Pn = sum(abs(senal_n).^2);
-SNR = 10*log(Ps/Pn);
 
 %---------P10-------------
 % Diodo
@@ -130,5 +123,15 @@ for t = 1:length(V1)
         V1(t) = 0;
     end
 end
+
+Vout = 2*lowpass(V1,6000,m.Fs)-0.34;
+
+figure;
+plot(1:length(Vout),Vout);
+grid on
+title('Señal recuperada')
+xlabel('x(t)')
+ylabel('tiempo (t)')
+
 
 
