@@ -124,10 +124,10 @@ for t = 1:length(V1)
     end
 end
 
-Vout = 2*lowpass(V1,6000,m.Fs)-0.34;
+mout = 2*lowpass(V1,6000,m.Fs)-0.34;
 
 figure;
-plot(1:length(Vout),Vout);
+plot(1:length(mout),mout);
 grid on
 title('Señal recuperada')
 xlabel('x(t)')
