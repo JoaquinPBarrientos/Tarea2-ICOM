@@ -4,6 +4,7 @@ m = open('music02.mat');
 m_derecho = (m.y(:,1));
 fm = (m.Fs)/8;
 mt = m_derecho(1:100000,1);
+
 figure;
 t = 1:length(mt);
 plot(t,mt);
@@ -13,6 +14,8 @@ mf = fft(mt);
 mf = mf(1:N/2 + 1);
 psd_mf = (1/(fm*N)* abs(mf).^2);
 freq = 0:fm/N:fm/2;
+
+
 
 figure; 
 plot(freq,10*log10(psd_mf))
@@ -124,7 +127,11 @@ for t = 1:length(V1)
     end
 end
 
-mout = 2*lowpass(V1,6000,m.Fs)-0.34;
+miout = lowpass(V1,6000,m.Fs);
+
+
+[mout, t] = resample(miout, tmi, fm);
+mout = 2*mout;
 
 figure;
 plot(1:length(mout),mout);
@@ -133,5 +140,5 @@ title('Señal recuperada')
 xlabel('x(t)')
 ylabel('tiempo (t)')
 
-
+sound(mout,m.Fs);
 
