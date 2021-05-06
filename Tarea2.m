@@ -117,7 +117,8 @@ xlabel('Frecuencia (Hz)')
 ylabel('Potencia/Frecuencia (dB/Hz)')
 
 %---------P9--------------
-
+% SNR = 10*log(Ps/Pn)
+SNR = 11;
 %---------P10-------------
 % Diodo
 V1 = st;
@@ -140,5 +141,42 @@ title('Señal recuperada')
 xlabel('x(t)')
 ylabel('tiempo (t)')
 
-sound(mout,m.Fs);
+%---------P11-------------
+tiledlayout(2,2);
+
+nexttile
+t = 1:length(mt);
+plot(t,mt);
+title('Señal original')
+xlabel('m(t)')
+ylabel('tiempo (t)')
+
+nexttile
+tout = 1:length(mout);
+plot(tout,mout);
+title('Señal recuperada')
+xlabel('mout(t)')
+ylabel('tiempo (t)')
+
+nexttile
+mfs = fft(m_derecho);
+mfss = fftshift(mfs);
+Nt = length(mfss);
+freqt = -m.Fs/2:m.Fs/Nt:m.Fs/2-2/m.Fs;
+plot(freqt,abs(mfss));
+xlabel('Frecuencia (Hz)')
+ylabel('|M(f)|')
+
+nexttile
+moutf = fft(mout);
+moutfs = fftshift(moutf);
+Nout = length(moutfs);
+freqout = -m.Fs/2:m.Fs/Nout:m.Fs/2-2/m.Fs;
+plot(freqout,abs(moutfs));
+xlabel('Frecuencia (Hz)')
+ylabel('|Mout(f)|')
+
+%---------P12-------------
+% Creamos .mat
+save('IntroCom-secuencias-grupo1','st','stsc','mout')
 
