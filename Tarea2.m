@@ -89,9 +89,7 @@ fc = 20*fm;
 k = 1; 
 tmi = transpose(tmi);
 csc = cos(2*pi*fc*tmi);
-% csc = csc(1:1000);
 csc = transpose(csc);
-% mi = mi(1:1000);
 stsc = mi.*csc * A;
 
 %-----------------------
@@ -117,8 +115,21 @@ xlabel('Frecuencia (Hz)')
 ylabel('Potencia/Frecuencia (dB/Hz)')
 
 %---------P9--------------
-% SNR = 10*log(Ps/Pn)
-SNR = 11;
+mu = 0;
+%sigma = 0.4199969;
+sigma = 0.42005;
+senal_n = normrnd(mu,sigma,size(st));
+
+figure;
+histogram(senal_n);
+grid on
+title('Distribución de la señal de ruido')
+
+Ps = bandpower(st);
+%Pn = Ps/12.59;
+Pn = bandpower(senal_n);
+
+SNR = 10*log(Ps/Pn);
 %---------P10-------------
 % Diodo
 V1 = st;
@@ -138,8 +149,8 @@ figure;
 plot(1:length(mout),mout);
 grid on
 title('Señal recuperada')
-xlabel('x(t)')
-ylabel('tiempo (t)')
+ylabel('x(t)')
+xlabel('tiempo (t)')
 
 %---------P11-------------
 tiledlayout(2,2);
@@ -148,15 +159,15 @@ nexttile
 t = 1:length(mt);
 plot(t,mt);
 title('Señal original')
-xlabel('m(t)')
-ylabel('tiempo (t)')
+ylabel('m(t)')
+xlabel('tiempo (t)')
 
 nexttile
 tout = 1:length(mout);
 plot(tout,mout);
 title('Señal recuperada')
-xlabel('mout(t)')
-ylabel('tiempo (t)')
+ylabel('mout(t)')
+xlabel('tiempo (t)')
 
 nexttile
 mfs = fft(m_derecho);
@@ -175,7 +186,8 @@ freqout = -m.Fs/2:m.Fs/Nout:m.Fs/2-2/m.Fs;
 plot(freqout,abs(moutfs));
 xlabel('Frecuencia (Hz)')
 ylabel('|Mout(f)|')
-
+xlim([-6000 6000])
+ylim([0 10000])
 %---------P12-------------
 % Creamos .mat
 save('IntroCom-secuencias-grupo1','st','stsc','mout')
