@@ -4,10 +4,24 @@ m = open('music02.mat');
 m_derecho = (m.y(:,1));
 fm = (m.Fs)/8;
 mt = m_derecho(1:100000,1);
+tiledlayout(1,2);
 
-figure;
+nexttile
+tc = 1:length(m_derecho);
+plot(tc,m_derecho);
+title('Señal Original completa')
+xlabel('m(t)')
+ylabel('tiempo (t)')
+
+
+nexttile
 t = 1:length(mt);
 plot(t,mt);
+title('Señal Original 1000 primeros puntos')
+xlabel('m(t)')
+ylabel('tiempo (t)')
+
+
 %---------P2--------------
 N = length(mt);
 mf = fft(mt);
